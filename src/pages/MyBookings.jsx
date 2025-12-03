@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getUserBookings, deleteBooking } from "../api/bookings";
+import { getUserBookings, deleteBooking } from "../api/bookings.js";
 
 export default function MyBookings() {
   const [username, setUsername] = useState(
@@ -13,6 +13,7 @@ export default function MyBookings() {
     setLoading(true);
     getUserBookings(username)
       .then((data) => setBookings(data))
+      .catch(() => setBookings([]))
       .finally(() => setLoading(false));
   }, [username]);
 
@@ -33,14 +34,16 @@ export default function MyBookings() {
             onChange={(e) => setUsername(e.target.value)}
           />
           <button
-            onClick={() => localStorage.setItem("talii_user", username)}
+            onClick={() => {
+              localStorage.setItem("talii_user", username);
+              window.location.reload();
+            }}
             className="btn"
           >
             Save
           </button>
         </div>
       )}
-
       {loading && <p>Loading...</p>}
       <ul className="bookings-list">
         {bookings.map((b) => (
@@ -50,7 +53,10 @@ export default function MyBookings() {
               <div>{b.date}</div>
             </div>
             <div>
-              <button className="btn small" onClick={() => handleCancel(b.id)}>
+              <button
+                className="btn small danger"
+                onClick={() => handleCancel(b.id)}
+              >
                 Cancel
               </button>
             </div>

@@ -2,13 +2,13 @@ const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:8000";
 
 export async function getExperiences() {
   const res = await fetch(`${API_BASE}/experiences`);
-  if (!res.ok) throw new Error("Failed to fetch experiences");
+  if (!res.ok) throw new Error("Failed to load experiences");
   return res.json();
 }
 
 export async function getExperience(id) {
   const res = await fetch(`${API_BASE}/experiences/${id}`);
-  if (!res.ok) throw new Error("Failed to fetch experience");
+  if (!res.ok) throw new Error("Failed to load experience");
   return res.json();
 }
 

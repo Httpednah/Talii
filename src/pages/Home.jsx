@@ -6,7 +6,7 @@ export default function Home() {
     <section>
       <header className="hero">
         <h1>Discover Local Experiences</h1>
-        <p>Book tours, classes and unique activities in your area.</p>
+        <p>Book tours, classes and unique activities close to you.</p>
         <div className="hero-actions">
           <Link to="/experiences" className="btn large primary">
             Browse Experiences
@@ -17,12 +17,12 @@ export default function Home() {
         </div>
       </header>
 
-      <section className="home-intro">
-        <h2>How Talii works</h2>
+      <section style={{ marginTop: 20 }}>
+        <h2>How it works</h2>
         <ol>
           <li>Browse by category or location</li>
           <li>View details and availability</li>
-          <li>Book and receive confirmation</li>
+          <li>Book and get confirmation</li>
         </ol>
       </section>
     </section>

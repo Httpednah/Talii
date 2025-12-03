@@ -1,15 +1,16 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import useFetch from "../hooks/useFetch";
-import { getExperience } from "../api/experiences";
-import RatingStars from "../components/RatingStars";
+import useFetch from "../hooks/useFetch.jsx";
+import { getExperience } from "../api/experiences.js";
+import RatingStars from "../components/RatingStars.jsx";
 
 export default function ExperienceDetails() {
   const { id } = useParams();
   const { data: exp, loading, error } = useFetch(() => getExperience(id), [id]);
 
   if (loading) return <p>Loading...</p>;
-  if (error) return <p className="error">{error.message}</p>;
+  if (error)
+    return <p className="error">{error.message || error.toString()}</p>;
   if (!exp) return <p>Not found</p>;
 
   return (
@@ -24,9 +25,9 @@ export default function ExperienceDetails() {
         <p className="exp-location">{exp.location}</p>
         <p className="exp-price">KSh {exp.price}</p>
         <RatingStars rating={exp.avg_rating || 0} />
-        <p>{exp.description}</p>
+        <p style={{ marginTop: 12 }}>{exp.description}</p>
 
-        <div className="exp-actions">
+        <div className="exp-actions" style={{ marginTop: 14 }}>
           <Link to={`/book/${exp.id}`} className="btn primary">
             Book this experience
           </Link>

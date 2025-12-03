@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import ExperienceCard from "../components/ExperienceCard";
-import LocationFilter from "../components/LocationFilter";
-import { getExperiences } from "../api/experiences";
+import ExperienceCard from "../components/ExperienceCard.jsx";
+import LocationFilter from "../components/LocationFilter.jsx";
+import { getExperiences } from "../api/experiences.js";
 
 export default function Experiences() {
   const [qLocation, setQLocation] = useState("");
@@ -13,19 +13,18 @@ export default function Experiences() {
     setLoading(true);
     getExperiences()
       .then((data) => setItems(data))
-      .catch((err) => setError(err.message))
+      .catch((err) => setError(err.message || err.toString()))
       .finally(() => setLoading(false));
   }, []);
 
   const filtered = items.filter((e) =>
-    e.location?.toLowerCase().includes(qLocation.toLowerCase())
+    (e.location || "").toLowerCase().includes(qLocation.toLowerCase())
   );
 
   return (
     <section>
       <h2>Experiences</h2>
       <LocationFilter value={qLocation} onChange={setQLocation} />
-
       {loading && <p>Loading...</p>}
       {error && <p className="error">{error}</p>}
 
