@@ -4,37 +4,49 @@ import LocationFilter from "../components/LocationFilter.jsx";
 import { getExperiences } from "../api/experiences.js";
 
 export default function Experiences() {
-  const [qLocation, setQLocation] = useState("");
-  const [items, setItems] = useState([]);
+  const [locationQuery, setLocationQuery] = useState("");
+  const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    setLoading(true);
-    getExperiences()
-      .then((data) => setItems(data))
-      .catch((err) => setError(err.message || err.toString()))
-      .finally(() => setLoading(false));
+    async function loadExperiences() {
+      try {
+        setLoading(true);
+        const data = await getExperiences();
+        setExperiences(data);
+      } catch (err) {
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadExperiences();
   }, []);
 
-  const filtered = items.filter((e) =>
-    (e.location || "").toLowerCase().includes(qLocation.toLowerCase())
+  // Filter experiences by location
+  const filteredExperiences = experiences.filter((exp) =>
+    (exp.location || "").toLowerCase().includes(locationQuery.toLowerCase())
   );
 
   return (
     <section>
       <h2>Experiences</h2>
-      <LocationFilter value={qLocation} onChange={setQLocation} />
-      {loading && <p>Loading...</p>}
+
+      <LocationFilter value={locationQuery} onChange={setLocationQuery} />
+
+      {loading && <p>Loading experiences...</p>}
       {error && <p className="error">{error}</p>}
 
       <div className="grid">
-        {filtered.map((exp) => (
+        {filteredExperiences.map((exp) => (
           <ExperienceCard key={exp.id} exp={exp} />
         ))}
       </div>
 
-      {!loading && filtered.length === 0 && <p>No experiences found.</p>}
+      {!loading && filteredExperiences.length === 0 && (
+        <p>No experiences found.</p>
+      )}
     </section>
   );
 }
